@@ -9,6 +9,7 @@ import ResetPassword from '@/views/auth/ResetPassword.vue'
 import Verify from '@/views/auth/Verify.vue'
 import Settings from '@/views/Settings.vue'
 import Discuss from '@/views/others/Discuss.vue'
+import Message from '@/views/others/Message.vue'
 
 export default [
   {
@@ -65,5 +66,10 @@ export default [
     path: '/discuss',
     name: 'discuss',
     component: Discuss
+  },
+  {
+    path: '/message',
+    name: 'message',
+    component: Message
   }
 ]

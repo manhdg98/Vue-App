@@ -27,8 +27,11 @@
     <v-toolbar-items
       v-else
     >
-      <v-btn to="/news" exact text>
-        News
+      <v-btn to="/message" exact text>
+        Messager
+      </v-btn>
+      <v-btn to="/discuss" exact text>
+        Discuss
       </v-btn>
       <v-btn to="/" exact text>
         Home

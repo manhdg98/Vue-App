@@ -71,7 +71,7 @@ router.route('/:id')
 
 router.route('/')
   .get(async (req, res) => {
-    const users = await User.find()
+    const users = await User.findAll()
     res.send(users)
   })
 
