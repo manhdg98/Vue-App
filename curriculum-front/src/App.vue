@@ -25,12 +25,6 @@
         Close
       </v-btn>
     </v-snackbar>
-    <v-overlay :value="loading">
-      <rotate-loader
-        :loading="loading"
-        :color="'#fff'"
-      />
-    </v-overlay>
   </v-app>
 </template>
 
