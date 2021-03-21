@@ -16,9 +16,11 @@ if (process.env.NODE_ENV === 'production') {
 const Curriculum = require('./Curriculum')
 const User = require('./User')
 const Verification = require('./Verification')
+const Timeline = require('./Timeline')
 
 module.exports = {
   Curriculum,
   User,
-  Verification
+  Verification,
+  Timeline
 }
