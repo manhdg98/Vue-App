@@ -125,5 +125,16 @@ export default {
       `count`
     )
     commit('updateCount', res.data)
+  },
+  async getAllTimeline ( {commit}) {
+    const { data } = await axios.get('timeline')
+    commit('setTimeline', data)
+  },
+  async postTimeline ({ commit }, timelineObj) {
+    const res = await axios.post(
+      'timeline',
+      timelineObj
+    )
+    commit('appendTimeline', res.data);
   }
 }

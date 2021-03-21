@@ -7,6 +7,9 @@ export default {
   setCurriculaMeta (state, metaData) {
     state.curriculaMeta = metaData
   },
+  setTimeline (state, timelineObj) {
+    state.timeline = timelineObj
+  },
   setCurricula (state, curricula) {
     console.log('set', curricula)
     state.curricula = curricula
@@ -17,6 +20,9 @@ export default {
   },
   appendCurriculum (state, curriculum) {
     state.curricula.push(curriculum)
+  },
+  appendTimeline (state, timelineObj) {
+    state.curricula = { ...state.curricula, ...timelineObj}
   },
   updateCurriculum (state, payload) {
     // payload: { id, body }

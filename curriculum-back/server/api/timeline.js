@@ -10,7 +10,7 @@ const router = express.Router()
 
 router.route('/')
   .get(async function (req, res) {
-    const timeline = await Timeline.findAll();
+    const timeline = await Timeline.find();
     res.send(timeline)
   })
 

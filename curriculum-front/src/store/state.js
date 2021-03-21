@@ -8,5 +8,6 @@ export default {
   },
   completeCounts: [],
   selectedCurriculum: {},
-  loading: false
+  loading: false,
+  timeline: {}
 }

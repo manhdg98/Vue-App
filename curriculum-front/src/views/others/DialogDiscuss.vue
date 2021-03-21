@@ -11,7 +11,6 @@
         <form @submit.prevent="submit">
           <h2> Timeline Discuss </h2>
           <validation-provider
-            v-slot="{ errors }"
             name="time"
             rules="required"
           >
@@ -48,7 +47,6 @@
             ></v-text-field>
           </validation-provider>
           <validation-provider
-            v-slot="{ errors }"
             name="image"
             rules="required"
           >
@@ -87,11 +85,15 @@
             class="mr-4"
             type="submit"
             :disabled="invalid"
+            @click="saveTimeline"
           >
             submit
           </v-btn>
-          <v-btn @click="clear">
+          <v-btn class="mr-4" @click="clear">
             clear
+          </v-btn>
+          <v-btn class="mr-4" @click="show=false">
+            close
           </v-btn>
           <v-btn @click="check">
             check
@@ -99,12 +101,21 @@
         </form>
       </validation-observer>
     </v-dialog>
+    <v-alert
+      dense
+      text
+      type="success"
+      v-if="timelineCondition"
+    >
+      Create success timeline
+    </v-alert>
   </div>
 </template>
 
 <script>
   import { required } from 'vee-validate/dist/rules'
   import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate'
+  import { mapActions, mapMutations, mapState } from 'vuex'
   setInteractionMode('eager')
 
   extend('required', {
@@ -134,18 +145,18 @@
       ValidationObserver,
     },
     data: () => ({
-      time: '',
+      time: '10:12',
       title: '',
       content: '',
       image: null,
-      time: '11:15',
-      timeStep: '10:10',
       files: [],
+      timelineCondition: false
     }),
     watch: {
 
     },
     methods: {
+      ...mapActions(['postTimeline', 'getAllTimeline']),
       submit () {
         this.$refs.observer.validate()
       },
@@ -165,6 +176,18 @@
                      content: ${this.content}
                      image: ${this.image[0].name}`
         console.log(check);
+      },
+      saveTimeline () {
+        const req = {
+          time: this.time,
+          title: this.title,
+          content: this.content,
+          image: this.image[0].name
+        };
+        this.postTimeline(req);
+        this.timelineCondition = true;
+        this.show = false;
+        this.getAllTimeline();
       }
     }
   }
