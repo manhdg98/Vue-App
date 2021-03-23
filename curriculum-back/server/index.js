@@ -7,7 +7,7 @@ const routes = require('./api')
 require('../db')
 
 const app = express()
-const port = 5000
+const port = process.env.NODE_ENV || 5000
 
 // middleware
 app.use(morgan('dev'))

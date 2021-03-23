@@ -1,6 +1,7 @@
 # Created by https://www.gitignore.io/api/vim,node,macos
 # Edit at https://www.gitignore.io/?templates=vim,node,macos
 
+commit.txt
 ### macOS ###
 # General
 .DS_Store

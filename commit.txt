@@ -1,5 +1,4 @@
-#1: Add project
+#5: Connect mongodb Atlas
 
-- Full stack vue
-- Nodejs
-- Vue (Vuetify)
+- Add config connect to mongodb Atlas
+- add port dynamic for server to deloy env production
