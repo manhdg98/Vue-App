@@ -33,4 +33,51 @@ router.route('/')
     }
   })
 
+router.route('/')
+.patch(async function (req, res) {
+  try {
+    const { id, time, title, content, image } = req.body;
+    let mapValidate = {
+      "time": time,
+      "title": title,
+      "content": content,
+      "image": image
+    }
+    let timeline;
+    
+    if(id) {
+      timeline = await Timeline.findById(id);
+      for ( let [item, value] of Object.entries(mapValidate)) {
+        if(value === undefined || value === null) {
+          throw new Error(`Params ${item} invalid`);
+        }
+      }
+      timeline.time = time;
+      timeline.title = title;
+      timeline.content = content;
+      timeline.image = image;
+    }
+    await timeline.save()
+    res.send(201, timeline)
+  } catch (err) {
+    throw new Error(err)
+  }
+})
+
+router.route('/')
+.delete(async function (req, res) {
+  try {
+    const { id } = req.body;
+
+    if(id) {
+      await Timeline.deleteOne({ _id: id });
+    }
+
+    res.send('Success')
+  } catch (err) {
+    throw new Error(err)
+  }
+})
+
+
 module.exports = router
