@@ -64,15 +64,12 @@ router.route('/')
   }
 })
 
-router.route('/')
+router.route('/:id')
 .delete(async function (req, res) {
   try {
-    const { id } = req.body;
-
-    if(id) {
-      await Timeline.deleteOne({ _id: id });
-    }
-
+    const { id } = req.params;
+    
+    await Timeline.deleteOne({ _id: id });
     res.send('Success')
   } catch (err) {
     throw new Error(err)
