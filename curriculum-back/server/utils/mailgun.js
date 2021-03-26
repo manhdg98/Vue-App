@@ -15,8 +15,8 @@ async function sendEmail(payload) {
     console.log('message sent')
     console.log(data)
   }).catch((error) => {
-      console.log(error)
-      // console.log(error.response.body.errors[0].message)
+    console.log(error)
+    // console.log(error.response.body.errors[0].message)
   })
   return true
 }

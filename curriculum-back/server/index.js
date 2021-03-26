@@ -15,7 +15,7 @@ app.use(express.json())
 app.use(helmet())
 app.use(cors())
 // encode url
-app.use(express.urlencoded({ extended: true })); 
+app.use(express.urlencoded({ extended: true })) 
 
 app.use('/api/v1', routes)
 
