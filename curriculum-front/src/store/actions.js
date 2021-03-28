@@ -136,5 +136,19 @@ export default {
       timelineObj
     )
     commit('appendTimeline', res.data);
+  },
+  async deleteTimeline ({ commit }, timelineId) {
+    await axios.delete(`timeline/${timelineId}`);
+    commit('removeTimeline', timelineId);
+  },
+  async updateTimeline ({ commit }, timelineObj) {
+    const res = await axios.patch(
+      `timeline`,
+      timelineObj
+    )
+    commit('updateTimeline', timelineObj)
+  },
+  getTimelineById ( {commit }, timelineId) {
+    commit('getTimelineById', timelineId);
   }
 }

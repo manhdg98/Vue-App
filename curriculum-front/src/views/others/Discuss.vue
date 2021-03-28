@@ -64,11 +64,15 @@
               <v-col cols="3">
                 <strong>{{ item.time }}</strong>
               </v-col>
-              <v-col>
+              <v-col cols="7">
                 <strong>{{ item.title }}</strong>
                 <div class="caption">
                   {{ item.content }}
                 </div>
+              </v-col>
+              <v-col cols="2"> 
+                <v-icon @click="editTimelineItem(item._id)">{{ iconEdit }}</v-icon>
+                <v-icon @click="deleteTimelineItem(item._id)">{{ iconDelete }}</v-icon>
               </v-col>
             </v-row>
           </v-timeline-item>
@@ -76,23 +80,31 @@
       </v-card-text>
     </v-card>
     <DialogDiscuss v-model="showdialog"/>
+    <DialogEditDiscuss :timelineObj="timelineObj" v-model="editDialog"/>
   </div>
 </template>
 
 <script>
 import DialogDiscuss from './DialogDiscuss.vue';
+import DialogEditDiscuss from './EditDialog.vue';
 import { mapMutations, mapActions, mapState } from 'vuex';
+import { mdiPencil, mdiDelete } from '@mdi/js'
 export default {
   name: 'Discuss',
   components: {
-    DialogDiscuss
+    DialogDiscuss,
+    DialogEditDiscuss
   },
   data() {
     return {
       day: 1,
       month: 1,
       years: 1990,
-      showdialog: false
+      showdialog: false,
+      editDialog: false,
+      iconEdit: mdiPencil,
+      iconDelete: mdiDelete,
+      timelineObj: {}
     }
   },
   computed: {
@@ -102,7 +114,7 @@ export default {
     
   },
   methods: {
-    ...mapActions(['getAllTimeline']),
+    ...mapActions(['getAllTimeline','deleteTimeline']),
     getDay() {
         const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
         let d = new Date().getDay();
@@ -116,9 +128,20 @@ export default {
     getYears() {
         return this.years = new Date().getFullYear();
     },
-    async info() { 
+    info() { 
       this.showdialog = true;
       console.log("data", this.timeline);
+    },
+    editTimelineItem(id) {
+      this.timelineObj = this.timeline.find( item => item._id === id);
+      this.editDialog = true;
+      console.log(this.editDialog)
+    },
+    async deleteTimelineItem(id) {
+      if(confirm("Do you really want to delete?")){
+        await this.deleteTimeline(id);
+        this.getAllTimeline();
+      }
     }
   },
   mounted() {
@@ -132,5 +155,8 @@ export default {
 #imageBanner {
     max-height: 200px;
     padding: 15px;
-  }
+}
+.v-timeline-item .col {
+  padding-top : 0;
+}
 </style>

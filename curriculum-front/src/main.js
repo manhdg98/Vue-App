@@ -21,6 +21,9 @@ Vue.config.productionTip = false
 export default new Vue({
   router,
   store,
+  icons: {
+    iconfont: 'mdiSvg', // 'mdi' || 'mdiSvg' || 'md' || 'fa' || 'fa4' || 'faSvg'
+  },
   vuetify,
   render: h => h(App)
 }).$mount('#app')

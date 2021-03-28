@@ -9,6 +9,25 @@ export default {
   },
   setTimeline (state, timelineObj) {
     state.timeline = timelineObj
+    console.log("state", state.timeline)
+  },
+  updateTimeline (state, timelineObj) {
+    const cIndex = state.timeline.findIndex((obj) => {
+      return obj._id === timelineObj.id
+    })
+    state.timeline.splice(cIndex, 1, timelineObj)
+  },
+  removeTimeline (state, timelineId) {
+    const cIndex = state.timeline.findIndex((obj) => {
+      return obj._id === timelineId
+    });
+    state.timeline.splice(cIndex, 1)
+  },
+  getTimelineById (state, timelineId) {
+    const cIndex = state.timeline.findIndex((obj) => {
+      return obj._id === timelineId
+    })
+    console.log(state.timeline[cIndex])
   },
   setCurricula (state, curricula) {
     console.log('set', curricula)
