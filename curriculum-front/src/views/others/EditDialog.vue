@@ -1,115 +1,125 @@
 <template>
-  <div class="text-center">
-    <v-dialog
-      v-model="show"
-      id="dialogDiscuss"
-    >
-      <validation-observer
-        ref="observer"
-        v-slot="{ invalid }"
+<v-container class="grey lighten-5">
+    <v-row no-gutters>
+      <v-col
+        xs="12"
+        md="12"
+        class="mx-auto"
       >
-        <form @submit.prevent="submit">
-          <h2> Timeline Discuss </h2>
-          <validation-provider
-            name="time"
-            rules="required"
+        <div class="text-center">
+          <v-dialog
+            v-model="show"
+            id="dialogDiscuss"
           >
-            <v-time-picker
-              v-model="timelineObj.time"
-              :allowed-minutes="allowedStep"
-              class="mt-4"
-              format="24hr"
-            ></v-time-picker>
-          </validation-provider>
-          <validation-provider
-            v-slot="{ errors }"
-            name="title"
-            :rules="{
-              required: true
-            }"
-          >
-            <v-text-field
-              v-model="timelineObj.title"
-              :error-messages="errors"
-              label="Title"
-              required
-            ></v-text-field>
-          </validation-provider>
-          <validation-provider
-            v-slot="{ errors }"
-            name="Description"
-          >
-            <v-text-field
-              v-model="timelineObj.content"
-              :error-messages="errors"
-              label="Description"
-              required
-            ></v-text-field>
-          </validation-provider>
-          <validation-provider
-            name="image"
-            rules="required"
-          >
-            <v-file-input
-              v-model="image"
-              color="deep-purple accent-4"
-              counter
-              multiple
-              placeholder="Select your files"
-              prepend-icon="mdi-paperclip"
-              outlined
-              :show-size="1000"
-              accept="image/*"
+            <validation-observer
+              ref="observer"
+              v-slot="{ invalid }"
             >
-              <template v-slot:selection="{ index, text }">
-                <v-chip
-                  v-if="index < 2"
-                  color="deep-purple accent-4"
-                  dark
-                  label
-                  small
+              <form @submit.prevent="submit" id="edit_time_line">
+                <h2> Edit Timeline </h2>
+                <validation-provider
+                  name="time"
+                  rules="required"
                 >
-                  {{ text }}
-                </v-chip>
+                  <v-time-picker
+                    v-model="timelineObj.time"
+                    :allowed-minutes="allowedStep"
+                    class="mt-4"
+                    format="24hr"
+                  ></v-time-picker>
+                </validation-provider>
+                <validation-provider
+                  v-slot="{ errors }"
+                  name="title"
+                  :rules="{
+                    required: true
+                  }"
+                >
+                  <v-text-field
+                    v-model="timelineObj.title"
+                    :error-messages="errors"
+                    label="Title"
+                    required
+                  ></v-text-field>
+                </validation-provider>
+                <validation-provider
+                  v-slot="{ errors }"
+                  name="Description"
+                >
+                  <v-text-field
+                    v-model="timelineObj.content"
+                    :error-messages="errors"
+                    label="Description"
+                    required
+                  ></v-text-field>
+                </validation-provider>
+                <validation-provider
+                  name="image"
+                  rules="required"
+                >
+                  <v-file-input
+                    v-model="image"
+                    color="deep-purple accent-4"
+                    counter
+                    multiple
+                    placeholder="Select your files"
+                    prepend-icon="mdi-paperclip"
+                    outlined
+                    :show-size="1000"
+                    accept="image/*"
+                  >
+                    <template v-slot:selection="{ index, text }">
+                      <v-chip
+                        v-if="index < 2"
+                        color="deep-purple accent-4"
+                        dark
+                        label
+                        small
+                      >
+                        {{ text }}
+                      </v-chip>
 
-                <span
-                  v-else-if="index === 2"
-                  class="overline grey--text text--darken-3 mx-2"
+                      <span
+                        v-else-if="index === 2"
+                        class="overline grey--text text--darken-3 mx-2"
+                      >
+                        +{{ files.length - 2 }} File(s)
+                      </span>
+                    </template>
+                  </v-file-input>
+                </validation-provider>
+                <v-btn
+                  class="mr-4"
+                  type="submit"
+                  :disabled="invalid"
+                  @click="updateItem()"
                 >
-                  +{{ files.length - 2 }} File(s)
-                </span>
-              </template>
-            </v-file-input>
-          </validation-provider>
-          <v-btn
-            class="mr-4"
-            type="submit"
-            :disabled="invalid"
-            @click="updateItem()"
+                  submit
+                </v-btn>
+                <v-btn class="mr-4" @click="clear">
+                  clear
+                </v-btn>
+                <v-btn class="mr-4" @click="show=false">
+                  close
+                </v-btn>
+                <v-btn @click="check()">
+                  check
+                </v-btn>
+              </form>
+            </validation-observer>
+          </v-dialog>
+          <v-alert
+            dense
+            text
+            type="success"
+            v-if="timelineCondition"
           >
-            submit
-          </v-btn>
-          <v-btn class="mr-4" @click="clear">
-            clear
-          </v-btn>
-          <v-btn class="mr-4" @click="show=false">
-            close
-          </v-btn>
-          <v-btn @click="check()">
-            check
-          </v-btn>
-        </form>
-      </validation-observer>
-    </v-dialog>
-    <v-alert
-      dense
-      text
-      type="success"
-      v-if="timelineCondition"
-    >
-      Create success timeline
-    </v-alert>
-  </div>
+            Create success timeline
+          </v-alert>
+        </div>
+      </v-col>
+  </v-row>
+</v-container>
 </template>
 
 <script>
@@ -196,7 +206,7 @@
 
 <style scope lang="scss">
 .v-dialog {
-  width:50%;
+  width: 50%;
   background-color: white;
   padding: 20px
 }
@@ -204,5 +214,25 @@
     text-align: center;
     float: left;
     margin-right: 15px;
+}
+@media only screen and (max-width: 600px) {
+  .v-dialog {
+    width: 100%;
+  }
+  .v-picker {
+    float: left;
+    width: 100%;
+  }
+  .v-time-picker-title__time {
+    margin: auto;
+  }
+  .v-input {
+    width: 100%;
+    float: left;
+  }
+  #edit_time_line button {
+    width: 100%;
+    float: left;
+  }
 }
 </style>

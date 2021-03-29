@@ -3,13 +3,9 @@
     <v-toolbar-title>
       <v-icon left>mdi-school</v-icon>
       <b>
-        <router-link
-          to="/"
-          style="text-decoration: none; color: black; outline: none"
-        >
+        
           Curricula App
-        </router-link>
-      </b>
+        </b>
     </v-toolbar-title>
 
     <v-spacer></v-spacer>
@@ -20,7 +16,12 @@
       <v-btn
         @click="openDrawer()"
       >
-        Menu
+        <router-link
+            to="/"
+            style="text-decoration: none; color: black; outline: none"
+          >
+          Menu
+        </router-link>
       </v-btn>
     </v-toolbar-items>
 

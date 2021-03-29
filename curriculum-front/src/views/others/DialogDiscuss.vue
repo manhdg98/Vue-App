@@ -8,8 +8,8 @@
         ref="observer"
         v-slot="{ invalid }"
       >
-        <form @submit.prevent="submit">
-          <h2> Timeline Discuss </h2>
+        <form @submit.prevent="submit" id="edit_time_line">
+          <h2> Create timeline </h2>
           <validation-provider
             name="time"
             rules="required"
@@ -195,7 +195,7 @@
 
 <style scope lang="scss">
 .v-dialog {
-  width:50%;
+  width: 50%;
   background-color: white;
   padding: 20px
 }
@@ -203,5 +203,25 @@
     text-align: center;
     float: left;
     margin-right: 15px;
+}
+@media only screen and (max-width: 600px) {
+  .v-dialog {
+    width: 100%;
+  }
+  .v-picker {
+    float: left;
+    width: 100%;
+  }
+  .v-time-picker-title__time {
+    margin: auto;
+  }
+  .v-input {
+    width: 100%;
+    float: left;
+  }
+  #edit_time_line button {
+    width: 100%;
+    float: left;
+  }
 }
 </style>

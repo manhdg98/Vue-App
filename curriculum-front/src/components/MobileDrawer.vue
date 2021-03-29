@@ -17,8 +17,9 @@
         </v-list-item-icon>
 
         <v-list-item-content>
-          <v-list-item-title>{{ item.title }}</v-list-item-title>
+          <v-list-item-title > <router-link :to="{ name: `${item.link}`}"> {{ item.name }} </router-link></v-list-item-title>
         </v-list-item-content>
+        
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
@@ -36,12 +37,25 @@ export default {
     return {
       navItems: [
         {
-          name: 'Home',
-          icon: 'home'
+          name: 'Create',
+          icon: 'dog',
+          link: 'create'
         },
         {
           name: 'View All',
-          icon: 'magnify'
+          icon: 'magnify',
+          link: 'curricula'
+        },
+        {
+          name: 'Discuss',
+          icon: 'bird',
+          link: 'discuss'
+        }
+        ,
+        {
+          name: 'Settings',
+          icon: 'cat',
+          link: 'settings'
         }
       ]
     }
