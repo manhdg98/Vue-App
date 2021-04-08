@@ -29,7 +29,7 @@
       v-else
     >
       <v-btn to="/message" exact text>
-        Messager
+        Message lovely
       </v-btn>
       <v-btn to="/discuss" exact text>
         Discuss

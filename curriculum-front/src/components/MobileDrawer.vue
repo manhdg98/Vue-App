@@ -56,6 +56,11 @@ export default {
           name: 'Settings',
           icon: 'cat',
           link: 'settings'
+        },
+        {
+          name: 'Message Lovely',
+          icon: 'love',
+          link: 'message'
         }
       ]
     }
