@@ -28,6 +28,9 @@
     <v-toolbar-items
       v-else
     >
+      <v-btn to="/mail" exact text>
+        Mail
+      </v-btn>
       <v-btn to="/message" exact text>
         Message lovely
       </v-btn>
