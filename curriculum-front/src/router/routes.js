@@ -10,12 +10,13 @@ import Verify from '@/views/auth/Verify.vue'
 import Settings from '@/views/Settings.vue'
 import Discuss from '@/views/others/Discuss.vue'
 import Message from '@/views/others/Message.vue'
+import Mail from '@/views/others/Mail.vue'
 
 export default [
   {
     path: '/',
     name: 'home',
-    component: Home
+    component: Message
   },
   {
     path: '/login',
@@ -71,5 +72,10 @@ export default [
     path: '/message',
     name: 'message',
     component: Message
+  },
+  {
+    path: '/mail',
+    name: 'mail',
+    component: Mail
   }
 ]

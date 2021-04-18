@@ -59,7 +59,7 @@ export default {
         },
         {
           name: 'Message Lovely',
-          icon: 'love',
+          icon: 'chat',
           link: 'message'
         }
       ]

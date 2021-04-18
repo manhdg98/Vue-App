@@ -150,5 +150,20 @@ export default {
   },
   getTimelineById ( {commit }, timelineId) {
     commit('getTimelineById', timelineId);
+  },
+  async getMailBox ( {commit}) {
+    const { data } = await axios.get('mailbox');
+    commit('setMailBox', data)
+  },
+  async getMailBoxByName ( {commit}, name) {
+    const { data } = await axios.get(`mailbox?name=${name}`);
+    return data;
+  },
+  async postMailBox ({ commit }, mailBoxObj) {
+    const res = await axios.post(
+      'mailbox',
+      mailBoxObj
+    )
+    commit('appendMailBox', res.data);
   }
 }

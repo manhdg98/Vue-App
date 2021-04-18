@@ -1,362 +1,179 @@
 <template>
-    <div>
-        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-        <div class="mailbox-viewport">
-                <div class="mailbox-wrapper">
-
-                    <div class="mailbox-top-wrapper">
-
-                        <div class="mailbox-flag">
-                            <div class="mailbox-flag-part red"></div>
-                            <div class="mailbox-flag-part red"></div>
-                            <div class="mailbox-flag-part black"></div>
-                        </div>
-
-                        <div class="mailbox-top red">
-                            <div class="mailbox-top-part black texture-1"></div>
-                            <div class="mailbox-top-part black texture-1"></div>
-                            <div class="mailbox-top-part black texture-1"></div>
-                            <div class="mailbox-top-part black texture-1"></div>
-                            <div class="mailbox-top-part black texture-1"></div>
-                        </div>
-
-                    </div>
-
-                    <div class="mailbox-caps-wrapper">
-
-                        <div class="mailbox-cap front">
-
-                            <div class="mailbox-text">
-                                <p>{{ nameMailBox }}</p>
-                            </div>
-
-                            <div class="mailbox-mailhole">
-                                <div class="mailbox-mailhole-top red"></div>
-                                <div class="mailbox-mailhole-side red"></div>
-                                <div class="mailbox-mailhole-side red"></div>
-                            </div>
-
-                            <div class="cap-top">
-                                <div class="cap-top-part black"></div>
-                                <div class="cap-top-part black"></div>
-                                <div class="cap-top-part black"></div>
-                                <div class="cap-top-part black"></div>
-                                <div class="cap-top-part black"></div>
-                            </div>
-                            <div class="cap-bottom black"></div>
-                        </div>
-
-                        <div class="mailbox-cap back">
-                            <div class="cap-top">
-                                <div class="cap-top-part black texture-2"></div>
-                                <div class="cap-top-part black texture-2"></div>
-                                <div class="cap-top-part black texture-2"></div>
-                                <div class="cap-top-part black texture-2"></div>
-                                <div class="cap-top-part black texture-2"></div>
-                            </div>
-                            <div class="cap-bottom black texture-2"></div>
-                        </div>
-
-                    </div>
-
-                    <div class="mailbox-side-wrapper">
-                        <div class="mailbox-side left black texture-1"></div>
-                        <div class="mailbox-side right black texture-1"></div>
-                    </div>
-
-                    <div class="mailbox-bottom black texture-1"></div>
-                </div>
-            </div>
+    <div> 
+        <div class="envelope"><input class="envelope__check" type="checkbox" @click="getDataMailBox()"/>
+		<div class="envelope__flap envelope__flap--inside"></div>
+		<div class="envelope__flap"> 
+			<div class="letter mt-5">
+				<div class="">
+					<p>Hey! 👋: {{ nameMailBox }} </p> 
+				</div>
+			</div> 
+		</div>
+		<div class="envelope__letter">
+			<div class="letter">
+				<div class="letter__content">
+					<p>Hey! 👋</p>
+					<ul v-for="item in dataMailBox" :key="item.id">
+						<li :style=" item.type === 'praise' ? 'color: blue' : 'color: red' ">({{ new Date(item.updatedAt).getHours() + ":" + new Date(item.updatedAt).getMinutes() + " " + getDay() }})  {{ item.message }}  </li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="envelope__back"></div>
+	</div>
     </div>
 </template>
 
 <script>
+import axios from '../../store/axiosConfig'
+import { mapActions, mapState } from 'vuex';
 export default {
-    name: "mailBox",
+	name: "mailBox",
+	data() {
+		return {
+			dataMailBox: {}
+		}
+	},
     props: {
       nameMailBox: String
-    }
+	},
+	computed: {
+		...mapState(['mailbox'])
+	},
+	methods: {
+		...mapActions(['getMailBox', 'getMailBoxByName']),
+		async getDataMailBox() {
+			const { data } = await axios.get(`mailbox?name=${this.nameMailBox}`);
+			this.dataMailBox = data;
+		},
+		getDay() {
+			const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+			let d = new Date().getDay();
+			return this.day = days[ d ];
+		}
+	}
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+* {
+	box-sizing: border-box;
+}
 
-
-/*-----------------------------*\
-	VIEWPORT
-\*-----------------------------*/
-.mailbox-viewport {
-	width: 300px;
-	height: 300px;
+.envelope {
+	width: 380px;
+	height: 200px;
+	background: #b49976;
 	position: relative;
- margin: 0 auto;
-
-	perspective: 800px;
 }
-
-.mailbox-viewport * {
+.envelope__check {
+	height: 100%;
+	width: 100%;
+	z-index: 10;
+	opacity: 0;
 	position: absolute;
-	transform-style: preserve-3d;
+	left: 0;
+	top: 0;
+	margin: 0;
+	cursor: pointer;
+	&:checked {
+		& ~ .envelope__flap {
+			transition: transform 0.25s 0s, z-index 0s 0.25s;
+			transform: rotateX(-180deg);
+			z-index: 0;
+		}
+		& ~ .envelope__letter {
+			transform: translateY(-110%);
+			transition: transform 0.25s 0.25s, z-index 0s 0.5s;
+			z-index: 5;
+		}
+	}
 }
-
-/*-----------------------------*\
-	GLOBAL
-\*-----------------------------*/
-.hidden {
-	display: none;
-}
-
-.red {
-	background-color: #c4442d;
-}
-
-.yellow {
-	background-color: #ffcc00;
-}
-
-.black {
-	background-color: #262626;
-}
-
-/*-----------------------------*\
-	WRAPPER
-\*-----------------------------*/
-.mailbox-wrapper {
-	width: 120px;
-	height: 180px;
-
-	transform-origin: 50% 50%;
-	transform: translate3d(90px, 130px, 0) rotateX(70deg) rotateZ(210deg);
-	transition: transform .6s;
-	animation: wrapper 2s;
-}
-
-.mailbox-wrapper:hover {
-	transform: translate3d(120px, 100px, 0) rotateX(80deg) rotateZ(230deg);
-}
-
-@keyframes wrapper {
- 0%{transform: translate3d(90px, 130px, 0) rotateX(70deg) rotateZ(210deg);}
- 100%{transform: translate3d(90px, 130px, 0) rotateX(70deg) rotateZ(570deg);}
-}
-
-/*-- bottom --*\
-\*-----------------------------*/
-.mailbox-bottom {
-	width: 120px;
-	height: 180px;
-}
-
-/*-- side --*\
-\*-----------------------------*/
-.mailbox-side {
-	width: 80px;
-	height: 180px;
-
-	transform-origin: 0 50%;
-	transform: rotateY(-90deg);
-}
-
-.mailbox-side:first-child {	
-	background-position: 100px 0;
-
-	transform: rotateY(90deg) translate3d(-80px, 0, 0);
-}
-
-.mailbox-side:last-child {	
-	transform: rotateY(-90deg) translate3d(0, 0, -120px);
-}
-
-/*-- top --*\
-\*-----------------------------*/
-.mailbox-top {
-	transform: translate3d(0, 0, 80px) rotateX(-90deg);
-}
-
-/*-- parts of the top --*/
-.mailbox-top-part {
-	height: 180px;
-	width: 30px;
-
-	transform-origin: 0 0;
-	transform: rotateX(90deg);
-}
-
-.mailbox-top-part:first-child {
-	background-position: 130px 0;
-
-	transform: translate3d(12px, -28px, 0) rotateX(90deg) rotateY(-245deg);
-}
-
-.mailbox-top-part:nth-child(2) {
-	background-position: 160px 0;
-
-	transform: translate3d(37.5px, -44.5px, 0) rotateX(90deg) rotateY(-215deg);
-}
-
-.mailbox-top-part:nth-child(3) {
-	width: 44px;
-	background-position: 204px 0;
-
-	transform: translate3d(82px, -44px, 0) rotateX(-90deg) rotateZ(180deg);
-}
-
-.mailbox-top-part:nth-child(4) {
-	background-position: 234px 0;
-
-	transform: translate3d(107px, -27px, 0) rotateX(90deg) rotateY(-145deg);
-}
-
-.mailbox-top-part:last-child {
-	background-position: 264px 0;
-
-	transform: translate3d(120px, 0, 0) rotateX(90deg) rotateY(-115deg);
-}
-
-/*-- caps --*\
-\*-----------------------------*/
-
-/*-- cap's top part --*/
-.cap-top-part {
-	width: 30px;
-	height: 55px;
-}
-
-.mailbox-cap.back .cap-top {
-	transform: translate3d(0, -28px, 0);
-}
-
-.mailbox-cap.front .cap-top {
-	transform: translate3d(0, -27px, 0);
-}
-
-.mailbox-cap.front {
-	transition: transform 1.4s .6s;
-}
-
-.mailbox-wrapper:hover .mailbox-cap.front {
-	transform: rotateX(90deg);
-}
-
-.mailbox-cap.back {
-	transform: translate3d(0, 180px, 0);
-}
-
-.cap-top-part:first-child {
-	background-position: -40px -30px;
-
-	transform: translate3d(16px, 0, 82.5px) rotateX(-90deg) rotateZ(-65deg);
-}
-
-.cap-top-part:nth-child(2) {
-	background-position: -40px -10px;
-
-	transform: translate3d(25px, -1px, 93px) rotateX(-90deg) rotateZ(-35deg);
-}
-
-.cap-top-part:nth-child(3) {
-	width: 47px;
-	background-position: -60px -10px;
-
-	transform: translate3d(37px, 0, 97px) rotateX(-90deg);
-}
-
-.cap-top-part:nth-child(4) {
-	background-position: -50px -30px;
-
-	transform: translate3d(65px, -1px, 93px) rotateX(-90deg) rotateZ(35deg);
-}
-
-.cap-top-part:last-child {
-	background-position: -70px -20px;
-
-	transform: translate3d(74px, 0, 82.5px) rotateX(-90deg) rotateZ(65deg);
-}
-
-/*-- cap's bottom part --*/
-.cap-bottom {
-	width: 120px;
-	height: 80px;
-	background-position: -60px -30px;
-
-	transform-origin: 50% 0%;
-	transform: translate3d(0, 0, 80px) rotateX(-90deg);
-}
-
-/*-- mailhole --*\
-\*-----------------------------*/
-.mailbox-mailhole-top {
-	width: 80px;
-	height: 12px;
-
-	transform: translate3d(20px, -12px, 50px);
-}
-
-.mailbox-mailhole-side {
-	width: 12px;
-	height: 12px;
-}
-
-.mailbox-mailhole-side:nth-child(2) {
-	transform: translate3d(94px, -12px, 44px) rotateX(90deg) rotateY(90deg);
-
-}
-
-.mailbox-mailhole-side:last-child {
-	transform: translate3d(14px, -12px, 44px) rotateX(90deg) rotateY(90deg);
-
-}
-
-/*-- mailflag --*\
-\*-----------------------------*/
-.mailbox-flag {
-	height: 120px;
-	width: 10px;
-
-	transform-origin: 0 31px 46px;
-	transform: rotateX(-90deg);
-	transition: transform .6s .6s;
-	animation: .4s infinite;
-}
-
-.mailbox-wrapper:hover .mailbox-flag {
+.envelope__check:checked ~ .envelope__letter .letter__content:nth-child(2),
+.envelope__check:checked ~ .envelope__letter .letter__content:nth-child(3) {
+	transition: transform 0.25s 0.5s;
 	transform: rotateX(0deg);
 }
-
-
-.mailbox-flag-part:first-child {
-	width: 10px;
-	height: 120px;
-
-	transform-origin: 50% 0%;
-	transform: translate3d(-6px, 30px, 40px) rotateX(90deg) rotateY(90deg) rotateZ(0deg);
+.envelope__flap {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 75%;
+	transition: transform 0.25s 0.5s, z-index 0s 0.5s;
+	transform-origin: top center;
+	backface-visibility: hidden;
+	background: repeating-linear-gradient(-45deg, #c1ab8e, #c1ab8e 10px, #e74c3c 10px, #e74c3c 20px, #c1ab8e 20px, #c1ab8e 30px, #1e90ff 30px, #1e90ff 40px) 0 0/100% 5px no-repeat, #c1ab8e;
+	z-index: 4;
+	clip-path: polygon(5% 40%, 50% 100%, 95% 40%, 100% 0, 0 0);
 }
-
-.mailbox-flag-part:nth-child(2) {
-	width: 40px;
-	height: 20px;
-
-	transform-origin: 50% 0%;
-	transform: translate3d(-21px, 46px, 140px) rotateX(90deg) rotateY(90deg) rotateZ(0deg);
+.envelope__flap--inside {
+	background: #c1ab8e;
+	backface-visibility: visible;
 }
-
-.mailbox-flag-part:last-child {
-	width: 8px;
-	height: 8px;
-	border-radius: 100%;
-
-	transform-origin: 50% 0%;
-	transform: translate3d(-6px, 31px, 42px) rotateX(90deg) rotateY(90deg) rotateZ(0deg);
+.envelope__back {
+	height: 100%;
+	width: 100%;
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 3;
+	background: repeating-linear-gradient(-45deg, #cebda6, #cebda6 10px, #e74c3c 10px, #e74c3c 20px, #cebda6 20px, #cebda6 30px, #1e90ff 30px, #1e90ff 40px) 0 100%/100% 5px no-repeat, repeating-linear-gradient(-45deg, #cebda6, #cebda6 10px, #e74c3c 10px, #e74c3c 20px, #cebda6 20px, #cebda6 30px, #1e90ff 30px, #1e90ff 40px) 0 100%/5px 100% no-repeat, repeating-linear-gradient(-45deg, #cebda6, #cebda6 10px, #e74c3c 10px, #e74c3c 20px, #cebda6 20px, #cebda6 30px, #1e90ff 30px, #1e90ff 40px) 100% 100%/5px 100% no-repeat, #cebda6;
+	clip-path: polygon(80% 40%, 100% 0, 100% 100%, 0 100%, 0 0, 20% 40%);
+	&:after {
+		height: 100%;
+		width: 100%;
+		background: repeating-linear-gradient(-45deg, #c7b49a, #c7b49a 10px, #e74c3c 10px, #e74c3c 20px, #c7b49a 20px, #c7b49a 30px, #1e90ff 30px, #1e90ff 40px) 0 100%/100% 5px no-repeat, #c7b49a;
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		clip-path: polygon(70% 10%, 100% 100%, 0 100%, 30% 10%);
+	}
 }
-
-/*-- mailtext --*\
-\*-----------------------------*/
-.mailbox-text {
-	color: #b8b8b8;
-	font-family: 'Lucida Grande', 'Trebuchet MS', 'Verdana', sans-serif;
-	font-size: 18px;
-	font-weight: bold; 
-
-	transform: translate3d(80px, -2px, 100px) rotateX(-90deg) rotateY(180deg);
+.envelope__letter {
+	height: 90%;
+	width: 90%;
+	z-index: 1;
+	position: absolute;
+	left: 5%;
+	top: 5%;
+	transition: transform 0.25s 0.25s, z-index 0s 0.25s;
+	transform: translateY(0);
+}
+.letter__content {
+	height: 100%;
+	width: 100%;
+	background-color: #fff;
+	top: 0;
+	left: 0;
+	position: absolute;
+	overflow-y: scroll;
+	overflow-x: hidden; 
+	padding: 14px;
+	text-align: start;
+	&:nth-child(3) {
+		backface-visibility: hidden;
+	}
+}
+.letter__content:nth-child(2),
+.letter__content:nth-child(3) {
+	transition: transform 0.25s;
+	top: 100%;
+	transform-origin: top center;
+	transform: rotateX(180deg);
+	backface-visibility: visible;
+	z-index: 2;
+	border-top: 1px solid #eee;
+}
+.sign-off {
+	position: absolute;
+	bottom: 12px;
+	right: 12px;
+	font-size: 20px;
+	font-family: cursive;
+	transform: skewX(-20deg);
 }
 </style>

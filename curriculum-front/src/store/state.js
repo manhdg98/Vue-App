@@ -9,5 +9,6 @@ export default {
   completeCounts: [],
   selectedCurriculum: {},
   loading: false,
-  timeline: {}
+  timeline: {},
+  mailbox: {}
 }

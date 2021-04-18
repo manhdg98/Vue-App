@@ -7,6 +7,16 @@ export default {
   setCurriculaMeta (state, metaData) {
     state.curriculaMeta = metaData
   },
+  setMailBox (state, mailboxObj) {
+    state.mailbox = mailboxObj
+    console.log("state", state.mailbox)
+  },
+  getMailBoxByName (state, name) {
+    const cIndex = state.mailbox.findIndex((obj) => {
+      return obj.name === name
+    })
+    console.log(cIndex)
+  },
   setTimeline (state, timelineObj) {
     state.timeline = timelineObj
     console.log("state", state.timeline)

@@ -17,10 +17,12 @@ const Curriculum = require('./Curriculum')
 const User = require('./User')
 const Verification = require('./Verification')
 const Timeline = require('./Timeline')
+const MailBox = require('./MailBox')
 
 module.exports = {
   Curriculum,
   User,
   Verification,
-  Timeline
+  Timeline,
+  MailBox
 }
