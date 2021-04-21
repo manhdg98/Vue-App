@@ -1,6 +1,6 @@
 <template>
     <div> 
-        <div class="envelope"><input class="envelope__check" type="checkbox" @click="getDataMailBox()"/>
+        <div class="envelope"><input class="envelope__check"  :disabled="openMailbox" type="checkbox"/>
 		<div class="envelope__flap envelope__flap--inside"></div>
 		<div class="envelope__flap"> 
 			<div class="letter mt-5">
@@ -9,14 +9,99 @@
 				</div>
 			</div> 
 		</div>
+		<v-dialog
+			v-model="dialog"
+			persistent
+			max-width="600"
+			>
+			<template v-slot:activator="{ on, attrs }">
+				<v-btn
+				color="primary"
+				dark
+				v-bind="attrs"
+				v-on="on"
+				:style="openMailbox === false ? 'z-index: -1' : 'z-index: 10; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%)'"
+				>
+					Enter Password
+				</v-btn>
+			</template>
+			<v-card>
+				<v-card-title class="headline">
+					Please enter password to access mailbox
+				</v-card-title>
+				<v-card-text style="max-width: 320px; margin: 0 auto">
+					<v-text-field
+						v-model="password"
+						:append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+						:rules="[rules.required, rules.min]"
+						:type="show1 ? 'text' : 'password'"
+						name="input-10-1"
+						label=""
+						hint="At least 8 characters"
+						counter
+						@click:append="show1 = !show1"
+						style="font-size: 24px"
+					></v-text-field>
+				</v-card-text>
+				<v-card-actions>
+				<v-spacer></v-spacer>
+				<v-btn
+					color="green"
+					text
+					@click="submitAccessMail()"
+				>
+					Agree
+				</v-btn>
+				<v-btn
+					color="black"
+					text
+					@click="dialog = false"
+				>
+					Disagree
+				</v-btn>
+				</v-card-actions>
+			</v-card>
+			<v-snackbar
+				v-model="snackbar"
+				top
+				>
+				Please enter correct password
+
+				<template v-slot:action="{ attrs }">
+					<v-btn
+					color="pink"
+					text
+					v-bind="attrs"
+					@click="snackbar = false"
+					>
+					Close
+					</v-btn>
+				</template>
+			</v-snackbar>
+		</v-dialog>
 		<div class="envelope__letter">
 			<div class="letter">
 				<div class="letter__content">
-					<p>Hey! 👋</p>
+					<span>Hey {{ nameMailBox }}! 👋</span> 
+					<div class="switch" style="float:right">
+						<v-switch
+							v-model="switch1"	
+						> </v-switch>
+						<v-btn
+							color="white"
+							style="max-width: 30px !important; box-shadow: 0 !important;"
+							@click="loadData()"
+						>
+							<img style="border-radius: 50%; width: 30px; height: 30px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Flat_restart_icon.svg/1200px-Flat_restart_icon.svg.png" alt="">
+						</v-btn>
+					</div>
+					
 					<ul v-for="item in dataMailBox" :key="item.id">
-						<li :style=" item.type === 'praise' ? 'color: blue' : 'color: red' ">({{ new Date(item.updatedAt).getHours() + ":" + new Date(item.updatedAt).getMinutes() + " " + getDay() }})  {{ item.message }}  </li>
+						<li v-if="item.type === 'praise' && switch1===true" style="color: blue; word-break: break-word" >({{ new Date(item.updatedAt).getHours() + ":" + new Date(item.updatedAt).getMinutes() + " " + getDay() }})  {{ item.message }}  </li>
+						<li v-if="item.type === 'suggest' && switch1===false" style="color: red; word-break: break-word">({{ new Date(item.updatedAt).getHours() + ":" + new Date(item.updatedAt).getMinutes() + " " + getDay() }})  {{ item.message }}  </li>
 					</ul>
 				</div>
+
 			</div>
 		</div>
 		<div class="envelope__back"></div>
@@ -31,25 +116,52 @@ export default {
 	name: "mailBox",
 	data() {
 		return {
-			dataMailBox: {}
+			dataMailBox: {},
+			show1: false,
+			rules: {
+				required: value => !!value || 'Required.',
+				min: v =>  v.length >= 8 ? '' : 'Min 8 characters',
+				emailMatch: () => (`The email and password you entered don't match`),
+			},
+			password: '',
+			dialog: false,
+			openMailbox: true,
+			snackbar: false,
+			switch1: true,
 		}
 	},
     props: {
-      nameMailBox: String
+	  nameMailBox: String,
+	  passwordUser: String
+	},
+	watch: {
+		switch1() {
+			console.log(this.switch1)
+		}
 	},
 	computed: {
 		...mapState(['mailbox'])
 	},
 	methods: {
 		...mapActions(['getMailBox', 'getMailBoxByName']),
-		async getDataMailBox() {
-			const { data } = await axios.get(`mailbox?name=${this.nameMailBox}`);
-			this.dataMailBox = data;
-		},
 		getDay() {
 			const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 			let d = new Date().getDay();
 			return this.day = days[ d ];
+		},
+		async submitAccessMail() {
+			if (this.password === this.passwordUser) {
+				const { data } = await axios.get(`mailbox?name=${this.nameMailBox}`);
+				this.dataMailBox = data;
+				this.dialog = false;
+				this.openMailbox = false;
+			} else {
+				this.snackbar = true;
+			}
+		},
+		async loadData() {
+			const { data } = await axios.get(`mailbox?name=${this.nameMailBox}`);
+			this.dataMailBox = data;
 		}
 	}
 }
@@ -59,10 +171,19 @@ export default {
 * {
 	box-sizing: border-box;
 }
-
+.v-btn:not(.v-btn--round).v-size--default {
+    height: 36px;
+    min-width: 39px;
+    padding: 0 16px;
+    box-shadow: none;
+}
+.none {
+	display: none;
+	opacity: 1;
+}
 .envelope {
-	width: 380px;
-	height: 200px;
+	width: 100%;
+	height: 250px;
 	background: #b49976;
 	position: relative;
 }

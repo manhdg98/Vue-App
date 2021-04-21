@@ -2,7 +2,7 @@
     <div id="containerAll">
         <v-container >
             <v-row>
-                <v-col xs="2" md="3" class="mt-10">
+                <v-col xs="2" md="3">
                     <div class="envelope-wrapper">
                     <div class="envelope" :class="{active: isActive}">
                       <div class="envelope-top"></div>
@@ -40,11 +40,11 @@
                                 fab
                                 dark
                                 small
-                                color="pink"
+                                color="blue"
                                 
                                 >
                                     <v-icon dark @click="sendMessage" :disabled="invalid">
-                                        mdi-heart
+                                        mdi-send
                                     </v-icon>
                                 </v-btn>
                             </form>
@@ -55,13 +55,26 @@
                     </div>
                 </v-col>
                 <v-col xs="10" md="9" class="mailbox d-flex flex-wrap justify-center">
-                    <mail-box nameMailBox="ManhNT" class="mx-5 my-10"></mail-box>
-                    <mail-box nameMailBox="UyenVT" class="mx-5 my-10"></mail-box>
-                    <mail-box nameMailBox="TrangPTH" class="mx-5 my-10"></mail-box>
-                    <mail-box nameMailBox="ManhTT" class="mx-5 my-10"></mail-box>
-                    <mail-box nameMailBox="ThuanNK" class="mx-5 my-10"></mail-box>
-                    <mail-box nameMailBox="ThinhAV" class="mx-5 my-10"></mail-box>
-
+                  <v-row>
+                    <v-col md="12">
+                      <v-text-field
+                        v-model="message1"
+                        label="Find by name"
+                        clearable
+                      ></v-text-field>
+                    </v-col>
+                    <v-col md="12">
+                      <mail-box v-if="message1 === 'ManhNT'" nameMailBox="ManhNT" passwordUser="yfLmuGAsWs" class="margin-top"></mail-box>
+                      <mail-box  v-if="message1 === 'UyenVT'" nameMailBox="UyenVT" passwordUser="fKDe7Xhc9k" class="margin-top"></mail-box>
+                      <mail-box v-if="message1 === 'TrangPTH'" nameMailBox="TrangPTH" passwordUser="GqqQdAWhgd" class="margin-top"></mail-box>
+                      <mail-box  v-if="message1 === 'ManhTT'" nameMailBox="ManhTT" passwordUser="3sZ8A3GFA2" class="margin-top"></mail-box>
+                      <mail-box v-if="message1 === 'ThuanNK'" nameMailBox="ThuanNK" passwordUser="BuPzbS7368" class="margin-top"></mail-box>
+                      <mail-box  v-if="message1 === 'ThinhAV'" nameMailBox="ThinhAV" passwordUser="P6XBjHew9R" class="margin-top"></mail-box>
+                      <mail-box  v-if="message1 === 'TiepNV'" nameMailBox="TiepNV" passwordUser="jiHu9cnMyk" class="margin-top"></mail-box>
+                    </v-col>
+                  </v-row>
+                 
+                        
                 </v-col>
             </v-row>
         </v-container>
@@ -94,8 +107,9 @@ export default {
           comment: '',
           nameSend: '',
           typeSend: '',
-          items: ['ManhNT', 'ManhTT', 'ThuanNK', 'UyenVT', 'ThinhAV', 'TrangPTH'],
-          itemsType: ['praise', 'suggest']
+          items: ['ManhNT', 'ManhTT', 'ThuanNK', 'UyenVT', 'ThinhAV', 'TrangPTH', 'TiepNV'],
+          itemsType: ['praise', 'suggest'],
+          message1: ''
         }
     },
     methods: {
@@ -120,8 +134,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.mailbox {
-  margin-top: 150px;
+.margin-top {
+  margin-top:100px
 }
 .container {
   width: 100%;
