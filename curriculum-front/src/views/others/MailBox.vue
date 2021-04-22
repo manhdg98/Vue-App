@@ -88,6 +88,7 @@
 							v-model="switch1"	
 						> </v-switch>
 						<v-btn
+							v-if="openMailbox === false"
 							color="white"
 							style="max-width: 30px !important; box-shadow: 0 !important;"
 							@click="loadData()"

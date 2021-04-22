@@ -51,7 +51,7 @@
                           </validation-observer>
                         </div>
                       </div>
-                    <span @click="myFilter" class="email-button">email me </span>
+                    <span @click="myFilter" class="email-button">email to </span>
                     </div>
                 </v-col>
                 <v-col xs="10" md="9" class="mailbox d-flex flex-wrap justify-center">
